@@ -27,7 +27,7 @@ export default async function handler(req, res) {
       ? new Date(Number(post.published_at) * 1000).toISOString()
       : null;
 
-    await collection.addItems([
+    const result = await collection.addItems([
   {
     slug: post.slug,
     fieldData: {
@@ -45,11 +45,12 @@ export default async function handler(req, res) {
 ]);
 
     return res.status(200).json({
-      ok: true,
-      message: "Post synced to Framer",
-      beehiiv_post_id: post.beehiiv_post_id,
-      slug: post.slug,
-    });
+  ok: true,
+  message: "Post synced to Framer",
+  beehiiv_post_id: post.beehiiv_post_id,
+  slug: post.slug,
+  result,
+});
   } catch (error) {
     return res.status(500).json({
       ok: false,
