@@ -116,6 +116,13 @@ export default async function handler(req, res) {
       },
     }),
 
+    ...(fieldByName.thumbnail_src && {
+      [fieldByName.thumbnail_src.id]: {
+        type: "string",
+        value: post.thumbnail_url || post.thumbnail_src || "",
+      },
+    }),
+
     ...(fieldByName.content_html && {
       [fieldByName.content_html.id]: {
         type: "string",
