@@ -54,6 +54,22 @@ export default async function handler(req, res) {
           type: "string",
           value: post.web_audience || "",
         },
+	[fieldByName.published_at.id]: {
+  	  type: "date",
+  	  value: post.published_at
+   	    ? new Date(Number(post.published_at) * 1000).toISOString()
+    	    : null,
+	},
+
+	[fieldByName.thumbnail_url.id]: {
+  	  type: "link",
+  	  value: post.thumbnail_url || "",
+	},
+
+	[fieldByName.last_synced_at.id]: {
+ 	  type: "date",
+  	  value: new Date().toISOString(),
+	},
       },
     };
 
