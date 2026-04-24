@@ -9,16 +9,22 @@ export default async function handler(req, res) {
       process.env.FRAMER_API_KEY
     );
 
-    const collections = await framer.getCollections();
+    const collectionId = "qej5xgzg3"; // Newsletter
+
+    const item = await framer.createItem(collectionId, {
+      title: "Test desde Vercel 🚀",
+      excerpt: "Este es un post de prueba",
+      content_html: "<p>Hello from API</p>",
+    });
 
     return res.status(200).json({
       ok: true,
-      collections: collections.map((collection) => ({
-        id: collection.id,
-        name: collection.name,
-      })),
+      item,
     });
+
   } catch (error) {
+    console.error(error);
+
     return res.status(500).json({
       ok: false,
       error: error.message,
