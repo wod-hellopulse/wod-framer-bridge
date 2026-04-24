@@ -9,13 +9,16 @@ export default async function handler(req, res) {
       process.env.FRAMER_API_KEY
     );
 
+    const collections = await framer.getCollections();
+
     return res.status(200).json({
       ok: true,
-      message: "Framer connected",
+      collections: collections.map((collection) => ({
+        id: collection.id,
+        name: collection.name,
+      })),
     });
   } catch (error) {
-    console.error("ERROR:", error);
-
     return res.status(500).json({
       ok: false,
       error: error.message,
