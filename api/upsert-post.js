@@ -104,7 +104,7 @@ export default async function handler(req, res) {
     ...(fieldByName.content_html && {
       [fieldByName.content_html.id]: {
         type: "string",
-        value: cleanHtml(post.content_html),
+        value: post.content_html ? cleanHtml(post.content_html) : "NO CONTENT RECEIVED",
       },
     }),
   },
