@@ -1,3 +1,18 @@
+function cleanHtml(html) {
+  if (!html) return "";
+
+  return html
+    .replace(/<!DOCTYPE[^>]*>/gi, "")
+    .replace(/<html[^>]*>/gi, "")
+    .replace(/<\/html>/gi, "")
+    .replace(/<head[\s\S]*?<\/head>/gi, "")
+    .replace(/<body[^>]*>/gi, "")
+    .replace(/<\/body>/gi, "")
+    .replace(/<style[\s\S]*?<\/style>/gi, "")
+    .replace(/<script[\s\S]*?<\/script>/gi, "")
+    .trim();
+}
+
 export default async function handler(req, res) {
   let framer;
 
@@ -69,6 +84,10 @@ export default async function handler(req, res) {
 	[fieldByName.last_synced_at.id]: {
  	  type: "date",
   	  value: new Date().toISOString(),
+	},
+	[fieldByName.content_html.id]: {
+  	  type: "string",
+  	  value: cleanHtml(post.content_html),
 	},
       },
     };
