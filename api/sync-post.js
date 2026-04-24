@@ -26,20 +26,32 @@ export default async function handler(req, res) {
     );
 
     await collection.addItems([
-      {
-        slug: post.slug,
-        fieldData: {
-          [fieldByName.title.id]: {
-            type: "string",
-            value: post.title || "",
-          },
-          [fieldByName.excerpt.id]: {
-            type: "string",
-            value: post.excerpt || "",
-          },
-        },
+  {
+    slug: post.slug,
+    fieldData: {
+      [fieldByName.title.id]: {
+        type: "string",
+        value: post.title || "",
       },
-    ]);
+      [fieldByName.excerpt.id]: {
+        type: "string",
+        value: post.excerpt || "",
+      },
+      [fieldByName.beehiiv_post_id.id]: {
+        type: "string",
+        value: post.beehiiv_post_id || "",
+      },
+      [fieldByName.beehiiv_url.id]: {
+        type: "link",
+        value: post.beehiiv_url || "",
+      },
+      [fieldByName.web_audience.id]: {
+        type: "string",
+        value: post.web_audience || "",
+      },
+    },
+  },
+]);
 
     return res.status(200).json({
       ok: true,
