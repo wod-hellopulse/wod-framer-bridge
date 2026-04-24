@@ -46,51 +46,69 @@ export default async function handler(req, res) {
     });
 
     const framerItem = {
-      ...(existing?.id ? { id: existing.id } : {}),
-      slug: post.slug,
-      fieldData: {
-        [fieldByName.beehiiv_post_id.id]: {
-          type: "string",
-          value: post.beehiiv_post_id || "",
-        },
-        [fieldByName.title.id]: {
-          type: "string",
-          value: post.title || "",
-        },
-        [fieldByName.excerpt.id]: {
-          type: "string",
-          value: post.excerpt || "",
-        },
-        [fieldByName.beehiiv_url.id]: {
-          type: "link",
-          value: post.beehiiv_url || "",
-        },
-        [fieldByName.web_audience.id]: {
-          type: "string",
-          value: post.web_audience || "",
-        },
-	[fieldByName.published_at.id]: {
-  	  type: "date",
-  	  value: post.published_at
-   	    ? new Date(Number(post.published_at) * 1000).toISOString()
-    	    : null,
-	},
+  ...(existing?.id ? { id: existing.id } : {}),
+  slug: post.slug,
 
-	[fieldByName.thumbnail_url.id]: {
-  	  type: "link",
-  	  value: post.thumbnail_url || "",
-	},
-
-	[fieldByName.last_synced_at.id]: {
- 	  type: "date",
-  	  value: new Date().toISOString(),
-	},
-	[fieldByName.content_html.id]: {
-  	  type: "string",
-  	  value: cleanHtml(post.content_html),
-	},
+  fieldData: {
+    ...(fieldByName.beehiiv_post_id && {
+      [fieldByName.beehiiv_post_id.id]: {
+        type: "string",
+        value: post.beehiiv_post_id || "",
       },
-    };
+    }),
+
+    ...(fieldByName.title && {
+      [fieldByName.title.id]: {
+        type: "string",
+        value: post.title || "",
+      },
+    }),
+
+    ...(fieldByName.excerpt && {
+      [fieldByName.excerpt.id]: {
+        type: "string",
+        value: post.excerpt || "",
+      },
+    }),
+
+    ...(fieldByName.beehiiv_url && {
+      [fieldByName.beehiiv_url.id]: {
+        type: "link",
+        value: post.beehiiv_url || "",
+      },
+    }),
+
+    ...(fieldByName.web_audience && {
+      [fieldByName.web_audience.id]: {
+        type: "string",
+        value: post.web_audience || "",
+      },
+    }),
+
+    ...(fieldByName.published_at && {
+      [fieldByName.published_at.id]: {
+        type: "date",
+        value: post.published_at
+          ? new Date(Number(post.published_at) * 1000).toISOString()
+          : null,
+      },
+    }),
+
+    ...(fieldByName.thumbnail_url && {
+      [fieldByName.thumbnail_url.id]: {
+        type: "link",
+        value: post.thumbnail_url || "",
+      },
+    }),
+
+    ...(fieldByName.content_html && {
+      [fieldByName.content_html.id]: {
+        type: "string",
+        value: cleanHtml(post.content_html),
+      },
+    }),
+  },
+};
 
     await collection.addItems([framerItem]);
 
