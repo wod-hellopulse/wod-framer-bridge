@@ -1,4 +1,12 @@
 export default async function handler(req, res) {
+  return res.status(200).json({
+    ok: true,
+    message: "endpoint reached",
+    body: req.body,
+  });
+}
+
+export default async function handler(req, res) {
   let framer;
 
   if (req.method !== "POST") {
