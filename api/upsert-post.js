@@ -12,34 +12,18 @@ function cleanHtml(html) {
     .replace(/<script[\s\S]*?<\/script>/gi, "")
     .trim();
 
-  // Start at first editorial section when possible
-  const markers = [
-    "Top Story of the Week",
-    "News",
-    "Deals",
-    "Interesting Reads",
-    "Podcasts",
-    "In Case You Missed It",
-    "World of DaaS Job Board"
-  ];
+  const contentStart = cleaned.search(/<div[^>]*id=['"]content-blocks['"][^>]*>/i);
 
-  const markerIndex = markers
-    .map((m) => cleaned.search(new RegExp(m, "i")))
-    .filter((i) => i >= 0)
-    .sort((a, b) => a - b)[0];
-
-  if (markerIndex !== undefined) {
-    cleaned = cleaned.slice(markerIndex);
+  if (contentStart >= 0) {
+    cleaned = cleaned.slice(contentStart);
   }
 
-  // Remove leftover Beehiiv social/share elements
   cleaned = cleaned
-    .replace(/<div[^>]*class=['"][^'"]*bh__byline_wrapper[^'"]*['"][\s\S]*?<\/div>/gi, "")
-    .replace(/<div[^>]*class=['"][^'"]*bh__byline_social_wrapper[^'"]*['"][\s\S]*?<\/div>/gi, "")
+    .replace(/<svg[\s\S]*?<\/svg>/gi, "")
     .replace(/<a[^>]*facebook\.com\/sharer[\s\S]*?<\/a>/gi, "")
     .replace(/<a[^>]*twitter\.com\/intent[\s\S]*?<\/a>/gi, "")
-    .replace(/<a[^>]*linkedin\.com\/share[\s\S]*?<\/a>/gi, "")
-    .replace(/<svg[\s\S]*?<\/svg>/gi, "");
+    .replace(/<a[^>]*threads\.net\/intent[\s\S]*?<\/a>/gi, "")
+    .replace(/<a[^>]*linkedin\.com\/sharing[\s\S]*?<\/a>/gi, "");
 
   return cleaned.trim();
 }
