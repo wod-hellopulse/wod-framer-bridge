@@ -12,18 +12,34 @@ function cleanHtml(html) {
     .replace(/<script[\s\S]*?<\/script>/gi, "")
     .trim();
 
-  // Remove Beehiiv header area before the real article body
-  const firstContentMarker =
-    cleaned.search(/Top Story of the Week|News|Deals|Interesting Reads|Podcasts|In Case You Missed It/i);
+  // Start at first editorial section when possible
+  const markers = [
+    "Top Story of the Week",
+    "News",
+    "Deals",
+    "Interesting Reads",
+    "Podcasts",
+    "In Case You Missed It",
+    "World of DaaS Job Board"
+  ];
 
-  if (firstContentMarker > -1) {
-    cleaned = cleaned.slice(firstContentMarker);
+  const markerIndex = markers
+    .map((m) => cleaned.search(new RegExp(m, "i")))
+    .filter((i) => i >= 0)
+    .sort((a, b) => a - b)[0];
+
+  if (markerIndex !== undefined) {
+    cleaned = cleaned.slice(markerIndex);
   }
 
-  // Remove social share links if present
+  // Remove leftover Beehiiv social/share elements
   cleaned = cleaned
-    .replace(/<a[^>]*>(Facebook|X|Twitter|LinkedIn)<\/a>/gi, "")
-    .replace(/<[^>]*aria-label=["']?(Facebook|X|Twitter|LinkedIn)["']?[^>]*>[\s\S]*?<\/[^>]+>/gi, "");
+    .replace(/<div[^>]*class=['"][^'"]*bh__byline_wrapper[^'"]*['"][\s\S]*?<\/div>/gi, "")
+    .replace(/<div[^>]*class=['"][^'"]*bh__byline_social_wrapper[^'"]*['"][\s\S]*?<\/div>/gi, "")
+    .replace(/<a[^>]*facebook\.com\/sharer[\s\S]*?<\/a>/gi, "")
+    .replace(/<a[^>]*twitter\.com\/intent[\s\S]*?<\/a>/gi, "")
+    .replace(/<a[^>]*linkedin\.com\/share[\s\S]*?<\/a>/gi, "")
+    .replace(/<svg[\s\S]*?<\/svg>/gi, "");
 
   return cleaned.trim();
 }
