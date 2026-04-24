@@ -1,7 +1,7 @@
 function cleanHtml(html) {
   if (!html) return "";
 
-  return html
+  let cleaned = html
     .replace(/<!DOCTYPE[^>]*>/gi, "")
     .replace(/<html[^>]*>/gi, "")
     .replace(/<\/html>/gi, "")
@@ -11,6 +11,21 @@ function cleanHtml(html) {
     .replace(/<style[\s\S]*?<\/style>/gi, "")
     .replace(/<script[\s\S]*?<\/script>/gi, "")
     .trim();
+
+  // Remove Beehiiv header area before the real article body
+  const firstContentMarker =
+    cleaned.search(/Top Story of the Week|News|Deals|Interesting Reads|Podcasts|In Case You Missed It/i);
+
+  if (firstContentMarker > -1) {
+    cleaned = cleaned.slice(firstContentMarker);
+  }
+
+  // Remove social share links if present
+  cleaned = cleaned
+    .replace(/<a[^>]*>(Facebook|X|Twitter|LinkedIn)<\/a>/gi, "")
+    .replace(/<[^>]*aria-label=["']?(Facebook|X|Twitter|LinkedIn)["']?[^>]*>[\s\S]*?<\/[^>]+>/gi, "");
+
+  return cleaned.trim();
 }
 
 export default async function handler(req, res) {
