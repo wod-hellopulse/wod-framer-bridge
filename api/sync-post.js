@@ -28,22 +28,21 @@ export default async function handler(req, res) {
       : null;
 
     await collection.addItems([
-      {
-        id: post.beehiiv_post_id,
-        slug: post.slug,
-        fieldData: {
-          [fieldByName.beehiiv_post_id.id]: { type: "string", value: post.beehiiv_post_id },
-          [fieldByName.title.id]: { type: "string", value: post.title },
-          [fieldByName.excerpt.id]: { type: "string", value: post.excerpt || "" },
-          [fieldByName.beehiiv_url.id]: { type: "link", value: post.beehiiv_url || "" },
-          [fieldByName.published_at.id]: { type: "date", value: publishedDate },
-          [fieldByName.web_audience.id]: { type: "string", value: post.web_audience || "" },
-          [fieldByName.content_html.id]: { type: "string", value: post.content_html || "" },
-          [fieldByName.thumbnail_url.id]: { type: "link", value: post.thumbnail_url || "" },
-          [fieldByName.last_synced_at.id]: { type: "date", value: new Date().toISOString() },
-        },
-      },
-    ]);
+  {
+    slug: post.slug,
+    fieldData: {
+      [fieldByName.beehiiv_post_id.id]: { type: "string", value: post.beehiiv_post_id },
+      [fieldByName.title.id]: { type: "string", value: post.title },
+      [fieldByName.excerpt.id]: { type: "string", value: post.excerpt || "" },
+      [fieldByName.beehiiv_url.id]: { type: "link", value: post.beehiiv_url || "" },
+      [fieldByName.published_at.id]: { type: "date", value: publishedDate },
+      [fieldByName.web_audience.id]: { type: "string", value: post.web_audience || "" },
+      [fieldByName.content_html.id]: { type: "string", value: post.content_html || "" },
+      [fieldByName.thumbnail_url.id]: { type: "link", value: post.thumbnail_url || "" },
+      [fieldByName.last_synced_at.id]: { type: "date", value: new Date().toISOString() },
+    },
+  },
+]);
 
     return res.status(200).json({
       ok: true,
