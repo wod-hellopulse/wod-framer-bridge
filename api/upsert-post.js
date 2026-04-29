@@ -129,6 +129,13 @@ export default async function handler(req, res) {
         value: post.content_html ? cleanHtml(post.content_html) : "NO CONTENT RECEIVED",
       },
     }),
+
+   ...(fieldByName.tags && {
+     [fieldByName.tags.id]: {
+       type: "array",
+       value: post.tags || [],
+     },
+   }),
   },
 };
 
