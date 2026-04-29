@@ -130,10 +130,14 @@ export default async function handler(req, res) {
       },
     }),
 
-   ...(fieldByName.tags && {
-     [fieldByName.tags.id]: {
-       type: "array",
-       value: post.tags || [],
+   ...(fieldByName.tags_text && {
+     [fieldByName.tags_text.id]: {
+       type: "string",
+       value: Array.isArray(post.content_tags)
+         ? post.content_tags.join(", ")
+         : Array.isArray(post.tags)
+           ? post.tags.join(", ")
+           : post.content_tags || post.tags || "",
      },
    }),
   },
