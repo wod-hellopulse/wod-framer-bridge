@@ -86,6 +86,13 @@ export default async function handler(req, res) {
       },
     }),
 
+    ...(fieldByName.tags_text && {
+     [fieldByName.tags_text.id]: {
+       type: "string",
+       value: String(post.tags_text || ""),
+     },
+    }),
+
     ...(fieldByName.beehiiv_url && {
       [fieldByName.beehiiv_url.id]: {
         type: "link",
@@ -127,13 +134,6 @@ export default async function handler(req, res) {
       [fieldByName.content_html.id]: {
         type: "string",
         value: post.content_html ? cleanHtml(post.content_html) : "NO CONTENT RECEIVED",
-      },
-    }),
-
-    ...(fieldByName.tags_text && {
-      [fieldByName.tags_text.id]: {
-        type: "string",
-        value: post.tags_text || "",
       },
     }),
   },
