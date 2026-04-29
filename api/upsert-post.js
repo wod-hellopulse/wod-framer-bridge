@@ -147,6 +147,9 @@ export default async function handler(req, res) {
       framer_item_id: existing?.id || null,
       beehiiv_post_id: post.beehiiv_post_id,
       slug: post.slug,
+      debug_tags_text_received: post.tags_text,
+      debug_fields: Object.keys(fieldByName),
+      debug_has_tags_text: Boolean(fieldByName.tags_text),
     });
   } catch (error) {
     return res.status(500).json({
