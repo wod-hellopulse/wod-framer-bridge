@@ -28,6 +28,29 @@ function cleanHtml(html) {
   return cleaned.trim();
 }
 
+async function autoPublishFramerSite(framer) {
+  if (process.env.AUTO_PUBLISH !== "true") {
+    return { skipped: true, reason: "AUTO_PUBLISH is not true" };
+  }
+
+  const publishResult = await framer.publish();
+  const deploymentId =
+    publishResult?.deployment?.id ||
+    publishResult?.deploymentId ||
+    publishResult?.id;
+
+  if (!deploymentId) {
+    throw new Error("Framer publish succeeded but no deployment ID was returned");
+  }
+
+  await framer.deploy(deploymentId);
+
+  return {
+    skipped: false,
+    deploymentId,
+  };
+}
+
 export default async function handler(req, res) {
   let framer;
 
@@ -141,9 +164,12 @@ export default async function handler(req, res) {
 
     await collection.addItems([framerItem]);
 
+    const publishResult = await autoPublishFramerSite(framer);
+
     return res.status(200).json({
       ok: true,
       action: existing ? "updated" : "created",
+      publish: publishResult,
       framer_item_id: existing?.id || null,
       beehiiv_post_id: post.beehiiv_post_id,
       slug: post.slug,
